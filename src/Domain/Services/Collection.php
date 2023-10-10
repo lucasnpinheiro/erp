@@ -2,15 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Lucasnpinheiro\Erp\Domain\Entity;
+namespace Lucasnpinheiro\Erp\Domain\Services;
+
+use Closure;
+use Lucasnpinheiro\Erp\Domain\Entity\Entity;
 
 abstract class Collection implements \IteratorAggregate
 {
-    private \ArrayIterator $list;
+    private CollectionIterator $list;
 
     private function __construct(array $list = [])
     {
-        $this->list = new \ArrayIterator($list);
+        $this->list = new CollectionIterator($list);
     }
 
     public static function create(array $list = []): static
@@ -22,7 +25,7 @@ abstract class Collection implements \IteratorAggregate
     {
         return new class($this->list) extends \FilterIterator
         {
-            public function __construct(\ArrayIterator $iterator)
+            public function __construct(CollectionIterator $iterator)
             {
                 parent::__construct($iterator);
             }
@@ -34,28 +37,13 @@ abstract class Collection implements \IteratorAggregate
         };
     }
 
-    public function filter(callable $callback = null): \FilterIterator
+    public function filter(Closure $callback = null): Collection
     {
-        return new class($this->list) extends \FilterIterator
-        {
-            protected $callback;
-            public function __construct(\ArrayIterator $iterator, callable $callback = null)
-            {
-                parent::__construct($iterator);
 
-                $this->callback = $callback ?: function ($current) {
-                    return !empty($current);
-                };
-            }
-
-            public function accept(): bool
-            {
-                return call_user_func($this->callback, parent::accept());
-            }
-        };
+        return new static(array_filter($this->list->toArray(), $callback));
     }
 
-    public function add(mixed $instance): void
+    public function add(Entity $instance): void
     {
         $this->list[] = $instance;
     }

@@ -7,12 +7,15 @@ services:
   php:
     container_name: php
     build:
-      dockerfile: php-dockerfile
       context: ./docker
     volumes:
       - './:/var/www/html'
+    ports:
+      - 9000:9000
     depends_on:
       - mariadb
+    networks:
+      - erp
 
   # Nginx Service
   nginx:
@@ -27,6 +30,8 @@ services:
       - './docker/nginx-conf:/etc/nginx/conf.d'
     depends_on:
       - php
+    networks:
+      - erp
 
   # MariaDB Service
   mariadb:
@@ -36,8 +41,13 @@ services:
       MYSQL_ROOT_PASSWORD: YOURPASSWORDHERE
     volumes:
       - './data:/var/lib/mysql'
+    networks:
+      - erp
 
 # Volumes
 volumes:
   data:
 
+networks:
+    erp:
+        driver: bridge

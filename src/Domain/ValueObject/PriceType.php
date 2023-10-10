@@ -10,9 +10,9 @@ use Lucasnpinheiro\Erp\Domain\Exception\InvalidPriceTypeException;
 class PriceType extends StringValueObject
 {
 
-    public const RETAIL = 'RETAIL';
-    public const WHOLESALE = 'WHOLESALE';
-    public const PROMOTION = 'PROMOTION';
+    private const RETAIL = 'RETAIL';
+    private const WHOLESALE = 'WHOLESALE';
+    private const PROMOTION = 'PROMOTION';
 
     public static function create(string $name): PriceType
     {
@@ -26,7 +26,7 @@ class PriceType extends StringValueObject
 
     protected function validate(string $value): bool
     {
-        if (!in_array($value, [self::all()], true)) {
+        if (!in_array($value, self::all())) {
             throw new InvalidPriceTypeException($value);
         }
         return true;

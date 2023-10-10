@@ -9,16 +9,15 @@ use Lucasnpinheiro\Erp\Domain\Exception\InvalidTaxeTypeException;
 
 class TaxeType extends StringValueObject
 {
-
-    public const ICMS = 'ICMS';
-    public const IPI = 'IPI';
-    public const PIS = 'PIS';
-    public const COFINS = 'COFINS';
-    public const ISS = 'ISS';
+    private const ICMS = 'ICMS';
+    private const IPI = 'IPI';
+    private const PIS = 'PIS';
+    private const COFINS = 'COFINS';
+    private const ISS = 'ISS';
 
     public static function create(string $name): TaxeType
     {
-        return new self($name);
+        return new static($name);
     }
 
     public static function all()
@@ -28,7 +27,7 @@ class TaxeType extends StringValueObject
 
     protected function validate(string $value): bool
     {
-        if (!in_array($value, [self::all()], true)) {
+        if (!in_array($value, self::all())) {
             throw new InvalidTaxeTypeException($value);
         }
         return true;
@@ -57,5 +56,30 @@ class TaxeType extends StringValueObject
     public static function ISS(): TaxeType
     {
         return self::create(self::ISS);
+    }
+
+    public function isICMS(): bool
+    {
+        return $this->value === self::ICMS;
+    }
+
+    public function isIPI(): bool
+    {
+        return $this->value === self::IPI;
+    }
+
+    public function isPIS(): bool
+    {
+        return $this->value === self::PIS;
+    }
+
+    public function isCOFINS(): bool
+    {
+        return $this->value === self::COFINS;
+    }
+
+    public function isISS(): bool
+    {
+        return $this->value === self::ISS;
     }
 }

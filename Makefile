@@ -15,4 +15,4 @@ sh:
 	@docker compose exec php bash
 
 test:
-	@docker compose exec php vendor/bin/phpunit --coverage-clover=coverage.clover --testdox tests
+	@docker compose exec php vendor/bin/phpunit --coverage-html coverage tests
