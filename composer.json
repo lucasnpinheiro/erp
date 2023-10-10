@@ -1,0 +1,16 @@
+{
+    "name": "lucasnpinheiro/erp",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Lucasnpinheiro\\Erp\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "lucasnpinheiro/base-value-object": "dev-main"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5@dev"
+    }
+}
