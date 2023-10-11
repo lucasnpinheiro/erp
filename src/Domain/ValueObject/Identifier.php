@@ -19,6 +19,11 @@ class Identifier extends IntValueObject
         return new self(0);
     }
 
+    public function isZero(): bool
+    {
+        return $this->value === 0;
+    }
+
     protected function validate(int $value): bool
     {
         if ($value < 0) {

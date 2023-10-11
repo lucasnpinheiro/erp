@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lucasnpinheiro\Erp\Domain\Entity;
 
 use Lucasnpinheiro\Erp\Domain\ValueObject\Code;
-use Lucasnpinheiro\Erp\Domain\ValueObject\DateTime;
+use Lucasnpinheiro\Erp\Domain\ValueObject\Date;
 use Lucasnpinheiro\Erp\Domain\ValueObject\Name;
 
 class SubGroup extends Entity
@@ -14,18 +14,18 @@ class SubGroup extends Entity
     private function __construct(
         private Code $code,
         private Name $name,
-        private DateTime $createdAt,
-        private ?DateTime $modifiedAt,
-        private ?DateTime $deletedAt,
+        private Date $createdAt,
+        private ?Date $modifiedAt,
+        private ?Date $deletedAt,
     ) {
     }
 
     public static function create(
         Code $code,
         Name $name,
-        DateTime $createdAt,
-        ?DateTime $modifiedAt = null,
-        ?DateTime $deletedAt = null,
+        Date $createdAt,
+        ?Date $modifiedAt = null,
+        ?Date $deletedAt = null,
     ): SubGroup {
         return new self(
             $code,
@@ -46,17 +46,17 @@ class SubGroup extends Entity
         return $this->code;
     }
 
-    public function createdAt(): DateTime
+    public function createdAt(): Date
     {
         return $this->createdAt;
     }
 
-    public function modifiedAt(): ?DateTime
+    public function modifiedAt(): ?Date
     {
         return $this->modifiedAt;
     }
 
-    public function deletedAt(): ?DateTime
+    public function deletedAt(): ?Date
     {
         return $this->deletedAt;
     }

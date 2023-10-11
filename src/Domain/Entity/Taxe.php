@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lucasnpinheiro\Erp\Domain\Entity;
 
-use Lucasnpinheiro\Erp\Domain\ValueObject\DateTime;
+use Lucasnpinheiro\Erp\Domain\ValueObject\Date;
 use Lucasnpinheiro\Erp\Domain\ValueObject\TaxeMoney;
 use Lucasnpinheiro\Erp\Domain\ValueObject\TaxeType;
 
@@ -16,9 +16,9 @@ class Taxe extends Entity
         private TaxeMoney $baseValue,
         private TaxeMoney $percentage,
         private TaxeMoney $value,
-        private DateTime $createdAt,
-        private ?DateTime $modifiedAt,
-        private ?DateTime $deletedAt,
+        private Date $createdAt,
+        private ?Date $modifiedAt,
+        private ?Date $deletedAt,
     ) {
     }
 
@@ -27,9 +27,9 @@ class Taxe extends Entity
         TaxeMoney $baseValue,
         TaxeMoney $percentage,
         TaxeMoney $value,
-        DateTime $createdAt,
-        ?DateTime $modifiedAt = null,
-        ?DateTime $deletedAt = null,
+        Date $createdAt,
+        ?Date $modifiedAt = null,
+        ?Date $deletedAt = null,
     ): Taxe {
         return new self(
             $type,
@@ -70,17 +70,17 @@ class Taxe extends Entity
         }
     }
 
-    public function createdAt(): DateTime
+    public function createdAt(): Date
     {
         return $this->createdAt;
     }
 
-    public function modifiedAt(): ?DateTime
+    public function modifiedAt(): ?Date
     {
         return $this->modifiedAt;
     }
 
-    public function deletedAt(): ?DateTime
+    public function deletedAt(): ?Date
     {
         return $this->deletedAt;
     }

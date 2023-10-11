@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lucasnpinheiro\Erp\Domain\Entity;
 
-use Lucasnpinheiro\Erp\Domain\ValueObject\DateTime;
+use Lucasnpinheiro\Erp\Domain\ValueObject\Date;
 use Lucasnpinheiro\Erp\Domain\ValueObject\Metadata;
 use Lucasnpinheiro\Erp\Domain\ValueObject\PriceMoney;
 use Lucasnpinheiro\Erp\Domain\ValueObject\PriceType;
@@ -23,9 +23,9 @@ class Price extends Entity
         private PriceMoney $basicMargin,
         private PriceMoney $markup,
         private Metadata $metadata,
-        private DateTime $createdAt,
-        private ?DateTime $modifiedAt,
-        private ?DateTime $deletedAt,
+        private Date $createdAt,
+        private ?Date $modifiedAt,
+        private ?Date $deletedAt,
     ) {
     }
 
@@ -38,9 +38,9 @@ class Price extends Entity
         PriceMoney $basicMargin,
         PriceMoney $markup,
         Metadata $metadata,
-        DateTime $createdAt,
-        ?DateTime $modifiedAt = null,
-        ?DateTime $deletedAt = null,
+        Date $createdAt,
+        ?Date $modifiedAt = null,
+        ?Date $deletedAt = null,
     ): Price {
         return new self(
             $type,
@@ -97,17 +97,17 @@ class Price extends Entity
         return $this->taxes;
     }
 
-    public function createdAt(): DateTime
+    public function createdAt(): Date
     {
         return $this->createdAt;
     }
 
-    public function modifiedAt(): ?DateTime
+    public function modifiedAt(): ?Date
     {
         return $this->modifiedAt;
     }
 
-    public function deletedAt(): ?DateTime
+    public function deletedAt(): ?Date
     {
         return $this->deletedAt;
     }
