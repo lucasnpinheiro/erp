@@ -69,18 +69,6 @@ RUN install-php-extensions \
 RUN install-php-extensions @composer
 RUN rm -rf /tmp/* /var/cache/apk/*
 RUN set -ex && \
-    ## PDFlib
-    ## https://www.pdflib.com/download/pdflib-product-family/
-    curl -fSL -o pdflib.tar.gz https://www.pdflib.com/binaries/PDFlib/931/PDFlib-9.3.1-Alpine-Linux-x64-php.tar.gz && \
-    tar -xzf pdflib.tar.gz && \
-    mv PDFlib-* pdflib && \
-    PHP_EXT_DIR=$(php-config --extension-dir) && \
-    PHP_MAIN_VERSION=$(php --version | grep -Eo '([0-9]{1,}\.)+[0-9]{1,}' | head -n1 | cut -d. -f1-2 | sed 's/\.//g') && \
-    cp pdflib/bind/php/php-${PHP_MAIN_VERSION}0-nts/php_pdflib.so $PHP_EXT_DIR && \
-    docker-php-ext-enable php_pdflib && \
-    rm pdflib.tar.gz && \
-    rm -r pdflib && \
-    : && \
     PHP_INI_DIR=$(php --ini | grep "Scan for additional .ini files in" | cut -d':' -f2 | cut -d' ' -f2 | head -n1) && \
     : && \
     ## timezone
@@ -90,3 +78,5 @@ RUN set -ex && \
 
 COPY opcache.ini PHP_INI_DIR/zz-opcache.ini
 COPY php.ini PHP_INI_DIR/zz-php.ini
+
+USER www-data

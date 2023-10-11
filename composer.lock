@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1354c51696ee703c0bd1e0332e217716",
+    "content-hash": "fdc17635650a8f4de79cb52579bf4553",
     "packages": [
         {
             "name": "lucasnpinheiro/base-value-object",
@@ -1706,7 +1706,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "lucasnpinheiro/base-value-object": 20
+        "lucasnpinheiro/base-value-object": 20,
+        "phpunit/phpunit": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

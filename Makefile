@@ -12,7 +12,7 @@ restart:
 	@make down
 
 sh:
-	@docker compose exec php bash
+	@docker compose exec php sh
 
 test:
-	@docker compose exec php vendor/bin/phpunit --coverage-html coverage tests
+	@docker compose exec php vendor/bin/phpunit --colors=auto --coverage-html tests/coverage/ tests
