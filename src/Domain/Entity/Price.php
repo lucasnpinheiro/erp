@@ -102,12 +102,12 @@ class Price extends Entity
         return $this->createdAt;
     }
 
-    public function modifiedAt(): DateTime
+    public function modifiedAt(): ?DateTime
     {
         return $this->modifiedAt;
     }
 
-    public function deletedAt(): DateTime
+    public function deletedAt(): ?DateTime
     {
         return $this->deletedAt;
     }
@@ -124,8 +124,8 @@ class Price extends Entity
             'markup' => $this->markup()->value(),
             'metadata' => $this->metadata()->toArray(),
             'created_at' => $this->createdAt()->value(),
-            'modified_at' => $this->modifiedAt()->value(),
-            'deleted_at' => $this->deletedAt()->value(),
+            'modified_at' => $this->modifiedAt()?->value(),
+            'deleted_at' => $this->deletedAt()?->value(),
         ];
     }
 }

@@ -1,17 +1,92 @@
-FROM php:8.2-fpm-bullseye
+FROM php:8.2-fpm-alpine3.18
 
-RUN apt-get update \
-    && apt-get install -y apt-transport-https gnupg2 libpng-dev libzip-dev unzip \
-    && rm -rf /var/lib/apt/lists/*
+LABEL Maintainer="Lucas Pinheiro" \
+      Description="latest PHP8.2 fpm Docker image. Use `docker-php-ext-install extension_name` to install Extensions." \
+      License="MIT License" \
+      Version="1.0.0"
 
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/install-php-extensions
+# Environments
+ENV TZ UTC
 
-RUN chmod uga+x /usr/bin/install-php-extensions \
-    && sync \
-    && install-php-extensions bcmath ds exif gd intl opcache pcntl pdo_sqlsrv redis sqlsrv zip pdo pdo_mysql mbstring
+ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_HOME=/usr/local/share/composer
 
-WORKDIR /var/www/html
+# Install usermod and usermod www-data
+RUN echo http://dl-2.alpinelinux.org/alpine/edge/community/ >> /etc/apk/repositories
+RUN apk add --no-cache shadow
+RUN usermod -u 1000 www-data
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Set timezone
+RUN set -ex && \
+    apk update && \
+    apk upgrade && \
+    apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone && \
+    apk del tzdata && \
+    rm -rf /tmp/* /var/cache/apk/*
 
-RUN curl -sS https://get.symfony.com/cli/installer | bash
+# Install extensions
+# ref to: https://github.com/mlocati/docker-php-extension-installer
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+# Install PCOV
+RUN apk add --no-cache autoconf build-base
+RUN pecl install pcov && docker-php-ext-enable pcov
+RUN chmod +x /usr/local/bin/install-php-extensions
+RUN sync
+RUN install-php-extensions \
+        bz2 \
+        csv \
+        decimal \
+        exif \
+        gd \
+        gettext \
+        gmp \
+        gnupg \
+        grpc \
+        igbinary \
+        imagick \
+        imap \
+        intl \
+        memcache \
+        memcached \
+        mysqli \
+        opcache \
+        pdo_mysql \
+        redis \
+        soap \
+        sockets \
+        ssh2 \
+        timezonedb \
+        uuid \
+        xdebug \
+        xlswriter \
+        xsl \
+        yaml \
+        zip
+    
+RUN install-php-extensions @composer
+RUN rm -rf /tmp/* /var/cache/apk/*
+RUN set -ex && \
+    ## PDFlib
+    ## https://www.pdflib.com/download/pdflib-product-family/
+    curl -fSL -o pdflib.tar.gz https://www.pdflib.com/binaries/PDFlib/931/PDFlib-9.3.1-Alpine-Linux-x64-php.tar.gz && \
+    tar -xzf pdflib.tar.gz && \
+    mv PDFlib-* pdflib && \
+    PHP_EXT_DIR=$(php-config --extension-dir) && \
+    PHP_MAIN_VERSION=$(php --version | grep -Eo '([0-9]{1,}\.)+[0-9]{1,}' | head -n1 | cut -d. -f1-2 | sed 's/\.//g') && \
+    cp pdflib/bind/php/php-${PHP_MAIN_VERSION}0-nts/php_pdflib.so $PHP_EXT_DIR && \
+    docker-php-ext-enable php_pdflib && \
+    rm pdflib.tar.gz && \
+    rm -r pdflib && \
+    : && \
+    PHP_INI_DIR=$(php --ini | grep "Scan for additional .ini files in" | cut -d':' -f2 | cut -d' ' -f2 | head -n1) && \
+    : && \
+    ## timezone
+    echo "date.timezone = ${TZ}" > $PHP_INI_DIR/zz-timezone.ini && \
+    : && \
+    echo 'expose_php = off' > $PHP_INI_DIR/zz-hide-header-version.ini
+
+COPY opcache.ini PHP_INI_DIR/zz-opcache.ini
+COPY php.ini PHP_INI_DIR/zz-php.ini
