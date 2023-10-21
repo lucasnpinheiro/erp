@@ -12,7 +12,7 @@
     },
     "scripts": {
         "test": [
-            "phpunit -c phpunit.xml --testdox --colors=always --coverage-html=./test/reports/coverage"
+            "phpunit --testdox --colors=auto --coverage-html tests/reports/coverage tests"
         ]
     },
     "require-dev": {

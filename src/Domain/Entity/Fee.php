@@ -65,7 +65,13 @@ class Fee extends Entity
     {
         $this->value = FeeMoney::createZero();
         if (!$this->percentage()->isZero() && !$this->baseValue()->isZero()) {
-            $this->value = $this->baseValue()->multiply($this->percentage());
+            $this->value = FeeMoney::create(
+                $this->baseValue()
+                    ->multiply(
+                        $this->percentage()->value()
+                    )
+                    ->value()
+            );
         }
     }
 

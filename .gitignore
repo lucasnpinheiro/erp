@@ -2,4 +2,4 @@
 /vendor
 .phpunit.cache
 .phpunit.result.cache
-tests/coverage
+tests/reports

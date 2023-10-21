@@ -29,4 +29,17 @@ class FeeTest extends TestCase
         $this->assertSame($modifiedAt, $fee->modifiedAt());
         $this->assertSame($deletedAt, $fee->deletedAt());
     }
+
+    public function testCalculate(): void
+    {
+        $baseValue = FeeMoney::create(100);
+        $percentage = FeeMoney::create(10);
+        $fee = FeeMoney::createZero();
+        $createdAt = Date::create('2022-01-01');
+        $fee = Fee::create(FeeType::PIS(), $baseValue, $percentage, $fee, $createdAt);
+
+        $fee->calculate();
+
+        $this->assertEquals(FeeMoney::create(10), $fee->value());
+    }
 }
