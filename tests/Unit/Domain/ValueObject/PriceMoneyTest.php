@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lucasnpinheiro\Erp\Tests\Domain\ValueObject;
 
 use BaseValueObject\MoneyValueObject;
-use Lucasnpinheiro\Erp\Domain\Exception\InvalidTaxeMoneyException;
+use Lucasnpinheiro\Erp\Domain\Exception\InvalidFeeMoneyException;
 use Lucasnpinheiro\Erp\Domain\ValueObject\PriceMoney;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +27,7 @@ class PriceMoneyTest extends TestCase
 
     public function testCreateWithInvalidValue(): void
     {
-        $this->expectException(InvalidTaxeMoneyException::class);
+        $this->expectException(InvalidFeeMoneyException::class);
         PriceMoney::create('-10.50');
     }
 

@@ -8,16 +8,16 @@ use Lucasnpinheiro\Erp\Domain\ValueObject\Date;
 use Lucasnpinheiro\Erp\Domain\ValueObject\Metadata;
 use Lucasnpinheiro\Erp\Domain\ValueObject\PriceMoney;
 use Lucasnpinheiro\Erp\Domain\ValueObject\PriceType;
-use Lucasnpinheiro\Erp\Domain\ValueObject\TaxeMoney;
-use Lucasnpinheiro\Erp\Domain\ValueObject\TaxeType;
+use Lucasnpinheiro\Erp\Domain\ValueObject\FeeMoney;
+use Lucasnpinheiro\Erp\Domain\ValueObject\FeeType;
 
 class Price extends Entity
 {
 
-    private function __construct(
+    protected function __construct(
         private PriceType $type,
         private PriceMoney $costValue,
-        private Taxes $taxes,
+        private Fees $fees,
         private PriceMoney $saleValue,
         private PriceMoney $profitMargin,
         private PriceMoney $basicMargin,
@@ -32,7 +32,7 @@ class Price extends Entity
     public static function create(
         PriceType $type,
         PriceMoney $costValue,
-        Taxes $taxes,
+        Fees $fees,
         PriceMoney $saleValue,
         PriceMoney $profitMargin,
         PriceMoney $basicMargin,
@@ -45,7 +45,7 @@ class Price extends Entity
         return new self(
             $type,
             $costValue,
-            $taxes,
+            $fees,
             $saleValue,
             $profitMargin,
             $basicMargin,
@@ -92,9 +92,9 @@ class Price extends Entity
         return $this->metadata;
     }
 
-    public function taxes(): Taxes
+    public function fees(): Fees
     {
-        return $this->taxes;
+        return $this->fees;
     }
 
     public function createdAt(): Date
@@ -117,7 +117,7 @@ class Price extends Entity
         return [
             'type' => $this->type()->value(),
             'cost_value' => $this->costValue()->value(),
-            'taxes' => $this->taxes()->toArray(),
+            'fees' => $this->fees()->toArray(),
             'sale_value' => $this->saleValue()->value(),
             'profit_margin' => $this->profitMargin()->value(),
             'basic_margin' => $this->basicMargin()->value(),

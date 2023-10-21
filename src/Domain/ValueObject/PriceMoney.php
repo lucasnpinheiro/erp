@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lucasnpinheiro\Erp\Domain\ValueObject;
 
 use BaseValueObject\MoneyValueObject;
-use Lucasnpinheiro\Erp\Domain\Exception\InvalidTaxeMoneyException;
+use Lucasnpinheiro\Erp\Domain\Exception\InvalidFeeMoneyException;
 
 class PriceMoney extends MoneyValueObject
 {
@@ -23,7 +23,7 @@ class PriceMoney extends MoneyValueObject
     protected function validate(string $value): bool
     {
         if ((float) $value < 0) {
-            throw new InvalidTaxeMoneyException($value);
+            throw new InvalidFeeMoneyException($value);
         }
         return true;
     }

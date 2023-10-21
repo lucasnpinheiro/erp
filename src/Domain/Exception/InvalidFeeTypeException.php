@@ -6,12 +6,12 @@ namespace Lucasnpinheiro\Erp\Domain\Exception;
 
 use InvalidArgumentException;
 
-class InvalidTaxeMoneyException extends InvalidArgumentException
+class InvalidFeeTypeException extends InvalidArgumentException
 {
     protected $code = 422;
 
     public function __construct(string $name)
     {
-        parent::__construct("Invalid taxe money: {$name}");
+        parent::__construct("Invalid fee type: {$name}");
     }
 }

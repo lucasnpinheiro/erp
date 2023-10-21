@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Lucasnpinheiro\Erp\Domain\Entity;
 
 use Lucasnpinheiro\Erp\Domain\ValueObject\Date;
-use Lucasnpinheiro\Erp\Domain\ValueObject\TaxeMoney;
-use Lucasnpinheiro\Erp\Domain\ValueObject\TaxeType;
+use Lucasnpinheiro\Erp\Domain\ValueObject\FeeMoney;
+use Lucasnpinheiro\Erp\Domain\ValueObject\FeeType;
 
-class Taxe extends Entity
+class Fee extends Entity
 {
-
-    private function __construct(
-        private TaxeType $type,
-        private TaxeMoney $baseValue,
-        private TaxeMoney $percentage,
-        private TaxeMoney $value,
+    protected function __construct(
+        private FeeType $type,
+        private FeeMoney $baseValue,
+        private FeeMoney $percentage,
+        private FeeMoney $value,
         private Date $createdAt,
         private ?Date $modifiedAt,
         private ?Date $deletedAt,
@@ -23,14 +22,14 @@ class Taxe extends Entity
     }
 
     public static function create(
-        TaxeType $type,
-        TaxeMoney $baseValue,
-        TaxeMoney $percentage,
-        TaxeMoney $value,
+        FeeType $type,
+        FeeMoney $baseValue,
+        FeeMoney $percentage,
+        FeeMoney $value,
         Date $createdAt,
         ?Date $modifiedAt = null,
         ?Date $deletedAt = null,
-    ): Taxe {
+    ): Fee {
         return new self(
             $type,
             $baseValue,
@@ -42,29 +41,29 @@ class Taxe extends Entity
         );
     }
 
-    public function type(): TaxeType
+    public function type(): FeeType
     {
         return $this->type;
     }
 
-    public function baseValue(): TaxeMoney
+    public function baseValue(): FeeMoney
     {
         return $this->baseValue;
     }
 
-    public function percentage(): TaxeMoney
+    public function percentage(): FeeMoney
     {
         return $this->percentage;
     }
 
-    public function value(): TaxeMoney
+    public function value(): FeeMoney
     {
         return $this->value;
     }
 
     public function calculate()
     {
-        $this->value = TaxeMoney::createZero();
+        $this->value = FeeMoney::createZero();
         if (!$this->percentage()->isZero() && !$this->baseValue()->isZero()) {
             $this->value = $this->baseValue()->multiply($this->percentage());
         }

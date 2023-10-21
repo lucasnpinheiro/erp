@@ -6,6 +6,6 @@ namespace Lucasnpinheiro\Erp\Domain\Entity;
 
 use Lucasnpinheiro\Erp\Domain\Services\Collection;
 
-class Taxes extends Collection
+class Fees extends Collection
 {
 }
