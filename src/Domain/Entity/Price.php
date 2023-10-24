@@ -8,13 +8,11 @@ use Lucasnpinheiro\Erp\Domain\ValueObject\Date;
 use Lucasnpinheiro\Erp\Domain\ValueObject\Metadata;
 use Lucasnpinheiro\Erp\Domain\ValueObject\PriceMoney;
 use Lucasnpinheiro\Erp\Domain\ValueObject\PriceType;
-use Lucasnpinheiro\Erp\Domain\ValueObject\FeeMoney;
-use Lucasnpinheiro\Erp\Domain\ValueObject\FeeType;
 
 class Price extends Entity
 {
 
-    protected function __construct(
+    private function __construct(
         private PriceType $type,
         private PriceMoney $costValue,
         private Fees $fees,

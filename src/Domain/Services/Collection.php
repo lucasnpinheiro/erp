@@ -6,10 +6,12 @@ namespace Lucasnpinheiro\Erp\Domain\Services;
 
 use Closure;
 use Lucasnpinheiro\Erp\Domain\Entity\Entity;
+use Traversable;
 
-abstract class Collection implements \IteratorAggregate
+abstract class Collection implements \Iterator
 {
     private CollectionIterator $list;
+    private int $index = 0;
 
     private function __construct(array $list = [])
     {
@@ -21,25 +23,41 @@ abstract class Collection implements \IteratorAggregate
         return new static($list);
     }
 
-    public function getIterator(): \FilterIterator
+    public function current(): string
     {
-        return new class($this->list) extends \FilterIterator
-        {
-            public function __construct(CollectionIterator $iterator)
-            {
-                parent::__construct($iterator);
-            }
+        return $this->list[$this->index];
+    }
 
-            public function accept(): bool
-            {
-                return parent::accept();
-            }
-        };
+    public function key(): int
+    {
+        return $this->index;
+    }
+
+    public function next(): void
+    {
+        $this->index++;
+    }
+
+    public function rewind(): void
+    {
+        $this->index = 0;
+    }
+
+    public function valid(): bool
+    {
+        return \array_key_exists($this->index, $this->list->toArray());
     }
 
     public function filter(Closure $callback = null): Collection
     {
-        return new static(array_filter($this->list->toArray(), $callback));
+        return new static(
+            array_values(
+                array_filter(
+                    $this->list->toArray(),
+                    $callback
+                )
+            )
+        );
     }
 
     public function add(Entity $instance): void
@@ -47,33 +65,6 @@ abstract class Collection implements \IteratorAggregate
         $this->list[] = $instance;
     }
 
-    public function first(): ?Entity
-    {
-        return reset($this->list);
-    }
-
-    public function last(): ?Entity
-    {
-        return end($this->list);
-    }
-
-    public function key()
-    {
-        return key($this->list);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function next()
-    {
-        return next($this->list);
-    }
-
-    public function current()
-    {
-        return current($this->list);
-    }
 
     public function all(): array
     {
@@ -88,15 +79,18 @@ abstract class Collection implements \IteratorAggregate
             return null;
         }
 
-        unset($this->list[$key]);
+        $list = $this->list->toArray();
+
+        unset($list[$key]);
+
+        $this->list = new CollectionIterator(
+            array_values($list)
+        );
 
         return $removed;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function removeElement(mixed $element)
+    public function removeElement(mixed $element): bool
     {
         $key = array_search($element, $this->toArray(), true);
 
@@ -104,7 +98,7 @@ abstract class Collection implements \IteratorAggregate
             return false;
         }
 
-        unset($this->list[$key]);
+        $this->list->offsetUnset($key);
 
         return true;
     }
@@ -114,9 +108,6 @@ abstract class Collection implements \IteratorAggregate
         return in_array($element, $this->toArray(), true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function exists(Closure $p)
     {
         foreach ($this->list->toArray() as $key => $element) {
@@ -138,17 +129,11 @@ abstract class Collection implements \IteratorAggregate
         return $this->list[$key] ?? null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getKeys(): array
     {
         return array_keys($this->toArray());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getValues(): array
     {
         return array_values($this->toArray());
@@ -156,15 +141,12 @@ abstract class Collection implements \IteratorAggregate
 
     public function __toString(): string
     {
-        return self::class . '@' . spl_object_hash($this);
+        return static::class . '@' . spl_object_hash($this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function clear(): void
     {
-        static::create([]);
+        $this->list = new CollectionIterator([]);
     }
 
     public function count(): int

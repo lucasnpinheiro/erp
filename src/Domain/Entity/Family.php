@@ -11,7 +11,7 @@ use Lucasnpinheiro\Erp\Domain\ValueObject\Name;
 class Family extends Entity
 {
 
-    protected function __construct(
+    private function __construct(
         private Code $code,
         private Name $name,
         private Date $createdAt,

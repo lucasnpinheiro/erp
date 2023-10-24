@@ -10,7 +10,7 @@ use Lucasnpinheiro\Erp\Domain\ValueObject\FeeType;
 
 class Fee extends Entity
 {
-    protected function __construct(
+    private function __construct(
         private FeeType $type,
         private FeeMoney $baseValue,
         private FeeMoney $percentage,
