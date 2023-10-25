@@ -8,11 +8,11 @@ down:
 	@docker compose down
 
 restart:
-	@make up
 	@make down
+	@make up
 
 sh:
 	@docker compose exec php sh
 
 test:
-	@docker compose exec php vendor/bin/phpunit --testdox --colors=auto --coverage-html tests/coverage/ tests
+	@docker compose exec php composer run test
